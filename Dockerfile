@@ -8,7 +8,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     RETICULUM_IDENTITY_DIR=/var/lib/rns-page-node/identity
 
 RUN useradd --create-home --home-dir /home/app --shell /usr/sbin/nologin --uid 10001 app \
-    && pip install --no-cache-dir "rns-page-node>=1.7.0" "libzim" "beautifulsoup4"
+    && pip install --no-cache-dir "rns-page-node==1.7.0" "libzim==3.13.0" "beautifulsoup4==4.15.0"
 
 RUN python - <<'PY'
 import os
@@ -38,6 +38,7 @@ PY
 
 RUN mkdir -p /srv/pages /srv/files "$RETIPEDIA_DATA_DIR/retipedia" \
     && mv /tmp/retipedia-src/Retipedia-* "$RETIPEDIA_HOME" \
+    && rm -rf /tmp/retipedia-src \
     && rm -f /tmp/retipedia.tar.gz
 
 COPY settings.py /tmp/settings.py
