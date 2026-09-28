@@ -1,0 +1,28 @@
+services:
+  retipedia:
+    build:
+      context: .
+    image: docker-retipedia:latest
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    environment:
+      RETIPEDIA_NODE_NAME: "Retipedia"
+      RETIPEDIA_ZIMS_DIR: "/zims"
+      RETIPEDIA_IMAGES: "false"
+      RETIPEDIA_ANNOUNCE_INTERVAL: "360"
+      RETIPEDIA_PAGE_REFRESH_INTERVAL: "0"
+      RETIPEDIA_FILE_REFRESH_INTERVAL: "0"
+      RETIPEDIA_LOG_LEVEL: "INFO"
+      # RETICULUM_CONFIG_DIR: "/var/lib/rns-page-node/reticulum"
+      # RETIPEDIA_LXMF_ADDRESS: ""
+    volumes:
+      - reticulum-identity:/var/lib/rns-page-node
+      - /path/to/zim-archives:/zims:ro
+
+volumes:
+  reticulum-identity:
