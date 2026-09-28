@@ -55,6 +55,8 @@ Set environment variables in compose (or `docker run -e ...`) as needed:
 - `RETIPEDIA_ZIMS_DIR` (defaults to `/zims`)
 - `RETIPEDIA_ROOT_FOLDER` (defaults to `Retipedia`)
 - `RETIPEDIA_ARCHIVE_PATH` / `RETIPEDIA_ARCHIVE_TYPE` (single-archive fallback)
+- `RETIPEDIA_GENERATE_META=true|false` (generate `.meta` sidecars at startup)
+- `RETIPEDIA_GENERATE_META_FORCE=true|false` (force re-scan of all archives at startup)
 
 ## Hardening notes
 

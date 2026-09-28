@@ -21,8 +21,8 @@ services:
       # RETICULUM_CONFIG_DIR: "/var/lib/rns-page-node/reticulum"
       # RETIPEDIA_LXMF_ADDRESS: ""
     volumes:
-      - reticulum-identity:/var/lib/rns-page-node
+      - retipedia-data:/var/lib/rns-page-node
       - /path/to/zim-archives:/zims:ro
 
 volumes:
-  reticulum-identity:
+  retipedia-data:
