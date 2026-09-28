@@ -11,7 +11,7 @@ Containerized Retipedia on top of `rns-page-node` for serving `.zim` archives ov
 
 ## Quick start
 
-1. Update the bind mount in `/home/runner/work/docker-retipedia/docker-retipedia/docker-compose.yml`:
+1. Update the bind mount in `docker-compose.yml`:
 
    - `/path/to/zim-archives:/zims:ro`
 

@@ -11,18 +11,33 @@ RUN useradd --create-home --home-dir /home/app --shell /usr/sbin/nologin --uid 1
     && pip install --no-cache-dir "rns-page-node>=1.7.0" "libzim" "beautifulsoup4"
 
 RUN python - <<'PY'
+import os
 import tarfile
 import urllib.request
 
-url = "https://codeload.github.com/RFnexus/Retipedia/tar.gz/refs/heads/master"
+ref = "2920e6ae300e40fe551745819fc8c856cbc9ac2f"
+url = f"https://codeload.github.com/RFnexus/Retipedia/tar.gz/{ref}"
 out = "/tmp/retipedia.tar.gz"
+extract_dir = "/tmp/retipedia-src"
 urllib.request.urlretrieve(url, out)
+os.makedirs(extract_dir, exist_ok=True)
+real_extract_dir = os.path.realpath(extract_dir) + os.sep
 with tarfile.open(out, "r:gz") as tf:
-    tf.extractall("/tmp", filter="data")
+    for member in tf.getmembers():
+        member_path = os.path.realpath(os.path.join(extract_dir, member.name))
+        if not member_path.startswith(real_extract_dir):
+            raise RuntimeError(f"unsafe archive path: {member.name}")
+        if member.issym() or member.islnk():
+            link_target = os.path.realpath(
+                os.path.join(os.path.dirname(member_path), member.linkname)
+            )
+            if not link_target.startswith(real_extract_dir):
+                raise RuntimeError(f"unsafe archive link: {member.name}")
+    tf.extractall(extract_dir, filter="data")
 PY
 
 RUN mkdir -p /srv/pages /srv/files "$RETIPEDIA_DATA_DIR/retipedia" \
-    && mv /tmp/Retipedia-master "$RETIPEDIA_HOME" \
+    && mv /tmp/retipedia-src/Retipedia-* "$RETIPEDIA_HOME" \
     && rm -f /tmp/retipedia.tar.gz
 
 COPY settings.py /tmp/settings.py
