@@ -4,6 +4,7 @@ set -eu
 RETIPEDIA_HOME="${RETIPEDIA_HOME:-/srv/pages/Retipedia}"
 RETIPEDIA_DATA_DIR="${RETIPEDIA_DATA_DIR:-/var/lib/rns-page-node}"
 RETICULUM_IDENTITY_DIR="${RETICULUM_IDENTITY_DIR:-$RETIPEDIA_DATA_DIR/identity}"
+RETICULUM_CONFIG_PATH="${RETICULUM_CONFIG_PATH:-${RETICULUM_CONFIG_DIR:-}}"
 export RETIPEDIA_ZIMS_DIR="${RETIPEDIA_ZIMS_DIR:-/zims}"
 
 mkdir -p \
@@ -31,8 +32,8 @@ set -- rns-page-node \
   --file-refresh-interval "${RETIPEDIA_FILE_REFRESH_INTERVAL:-0}" \
   --log-level "${RETIPEDIA_LOG_LEVEL:-INFO}" "$@"
 
-if [ -n "${RETICULUM_CONFIG_DIR:-}" ]; then
-  set -- "$@" --config "$RETICULUM_CONFIG_DIR"
+if [ -n "$RETICULUM_CONFIG_PATH" ]; then
+  set -- "$@" --config "$RETICULUM_CONFIG_PATH"
 fi
 
 exec "$@"

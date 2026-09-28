@@ -34,7 +34,8 @@ That is enough for first run. The container auto-generates Retipedia metadata si
 
 Set environment variables in compose (or `docker run -e ...`) as needed:
 
-- `RETICULUM_CONFIG_DIR` (optional path passed to `rns-page-node --config`, typically a Reticulum config file path)
+- `RETICULUM_CONFIG_PATH` (optional path passed to `rns-page-node --config`, typically a Reticulum config file path)
+- `RETICULUM_CONFIG_DIR` (legacy alias for `RETICULUM_CONFIG_PATH`)
 - `RETICULUM_IDENTITY_DIR` (defaults to `/var/lib/rns-page-node/identity`)
 - `RETIPEDIA_NODE_NAME`
 - `RETIPEDIA_ANNOUNCE_INTERVAL`

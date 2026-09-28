@@ -18,7 +18,7 @@ services:
       RETIPEDIA_PAGE_REFRESH_INTERVAL: "0"
       RETIPEDIA_FILE_REFRESH_INTERVAL: "0"
       RETIPEDIA_LOG_LEVEL: "INFO"
-      # RETICULUM_CONFIG_DIR: "/var/lib/rns-page-node/reticulum"
+      # RETICULUM_CONFIG_PATH: "/var/lib/rns-page-node/reticulum/config"
       # RETIPEDIA_LXMF_ADDRESS: ""
     volumes:
       - retipedia-data:/var/lib/rns-page-node
