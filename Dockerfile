@@ -11,6 +11,19 @@ RUN useradd --create-home --home-dir /home/app --shell /usr/sbin/nologin --uid 1
     && pip install --no-cache-dir "rns-page-node==1.7.0" "libzim==3.13.0" "beautifulsoup4==4.15.0"
 
 RUN python - <<'PY'
+from pathlib import Path
+import rns_page_node.handlers
+
+handlers = Path(rns_page_node.handlers.__file__)
+source = handlers.read_text()
+old = 'MEDIA_EXTS = [".webp"]'
+new = 'MEDIA_EXTS = [".webp", ".png", ".jpg", ".gif"]'
+if source.count(old) != 1:
+    raise RuntimeError("unexpected rns-page-node media extension allowlist")
+handlers.write_text(source.replace(old, new))
+PY
+
+RUN python - <<'PY'
 import os
 import tarfile
 import urllib.request
@@ -45,10 +58,10 @@ COPY settings.py /tmp/settings.py
 RUN cp /tmp/settings.py "$RETIPEDIA_HOME/settings.py" \
     && rm -f /tmp/settings.py \
     && rm -rf "$RETIPEDIA_HOME"/zims "$RETIPEDIA_HOME"/cache "$RETIPEDIA_HOME"/images \
-    && mkdir -p "$RETIPEDIA_DATA_DIR"/retipedia/zims "$RETIPEDIA_DATA_DIR"/retipedia/cache "$RETIPEDIA_DATA_DIR"/retipedia/images \
+    && mkdir -p "$RETIPEDIA_DATA_DIR"/retipedia/zims "$RETIPEDIA_DATA_DIR"/retipedia/cache "$RETIPEDIA_DATA_DIR"/Retipedia/images \
     && ln -s "$RETIPEDIA_DATA_DIR"/retipedia/zims "$RETIPEDIA_HOME"/zims \
     && ln -s "$RETIPEDIA_DATA_DIR"/retipedia/cache "$RETIPEDIA_HOME"/cache \
-    && ln -s "$RETIPEDIA_DATA_DIR"/retipedia/images "$RETIPEDIA_HOME"/images \
+    && ln -s "$RETIPEDIA_DATA_DIR"/Retipedia/images "$RETIPEDIA_HOME"/images \
     && python3 "$RETIPEDIA_HOME/generate_meta.py" --fix-shebangs=/usr/local/bin/python3 \
     && chmod +x "$RETIPEDIA_HOME"/*.mu
 

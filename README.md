@@ -68,7 +68,8 @@ docker run -d \
 Retipedia `.meta` sidecars are generated at startup. If you add or replace archives and want a full rescan:
 
 ```bash
-RETIPEDIA_GENERATE_META_FORCE=true docker compose up -d
+docker compose run --rm --entrypoint python retipedia \
+  /srv/pages/Retipedia/generate_meta.py --force
 ```
 
 ## Required mounts
@@ -82,7 +83,7 @@ RETIPEDIA_GENERATE_META_FORCE=true docker compose up -d
 
 Set environment variables in compose (or `docker run -e ...`) as needed:
 
-- `RETICULUM_CONFIG_PATH` (optional path passed to `rns-page-node --config`, typically a Reticulum config file path)
+- `RETICULUM_CONFIG_PATH` (directory passed to `rns-page-node --config`; defaults to `/var/lib/rns-page-node/reticulum`)
 - `RETICULUM_CONFIG_DIR` (legacy alias for `RETICULUM_CONFIG_PATH`)
 - `RETICULUM_IDENTITY_DIR` (defaults to `/var/lib/rns-page-node/identity`)
 - `RETIPEDIA_NODE_NAME`
