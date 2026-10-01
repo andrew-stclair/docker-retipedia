@@ -23,6 +23,54 @@ Containerized Retipedia on top of `rns-page-node` for serving `.zim` archives ov
 
 That is enough for first run. The container auto-generates Retipedia metadata sidecars for mounted archives at startup.
 
+## Usage
+
+### Docker Compose
+
+1. Edit `/path/to/zim-archives` in `docker-compose.yml`
+2. Start:
+
+   ```bash
+   docker compose up --build -d
+   ```
+
+3. View logs:
+
+   ```bash
+   docker compose logs -f retipedia
+   ```
+
+4. Stop:
+
+   ```bash
+   docker compose down
+   ```
+
+### Docker run
+
+```bash
+docker build -t docker-retipedia:latest .
+
+docker run -d \
+  --name retipedia \
+  --read-only \
+  --cap-drop=ALL \
+  --security-opt no-new-privileges:true \
+  --tmpfs /tmp:rw,noexec,nosuid,size=64m \
+  -v retipedia-data:/var/lib/rns-page-node \
+  -v /path/to/zim-archives:/zims:ro \
+  -e RETIPEDIA_NODE_NAME="Retipedia" \
+  docker-retipedia:latest
+```
+
+### Refreshing archive metadata
+
+Retipedia `.meta` sidecars are generated at startup. If you add or replace archives and want a full rescan:
+
+```bash
+RETIPEDIA_GENERATE_META_FORCE=true docker compose up -d
+```
+
 ## Required mounts
 
 - **Writable volume** for identity and runtime state:
